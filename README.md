@@ -27,13 +27,16 @@ Task Creation: The workflow connects via API to Google Sheets, automatically app
 Proof of Concept
 
 1. The Workflow Canvas
-This is the end-to-end automation map showing the connection between the API trigger, the AI brain, and the final spreadsheet destination. 
+This is the end-to-end automation map showing the connection between the API trigger, the AI brain, and the final spreadsheet destination.
+![Workflow Canvas](workflow-map.png)
 
-2. The AI Intelligence in Action
-Here is a look at the raw brain of the assistant. You can see how the AI takes a messy message and turns it into clean data. 
+3. The AI Intelligence in Action
+Here is a look at the raw brain of the assistant. You can see how the AI takes a messy message and turns it into clean data.
+![AI Output](ai-output.png)
 
-3. The Final Task Log (Google Sheets)
+5. The Final Task Log (Google Sheets)
 The final destination. Every row here was generated without a single human keystroke. 
+![Google Sheets Results](sheets-results.png)
 
 Setup and Installation
 Import Workflow: Import the provided .json file into your n8n instance.
