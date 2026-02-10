@@ -16,6 +16,7 @@ Data Storage: Google Sheets (Real-world API Integration)
 
 Custom Logic: JavaScript (Data sanitization and JSON parsing)
 
+
 Overview of the solution :
 
 Trigger: A Webhook receives an "email-style" JSON payload (simulating an incoming support ticket).
@@ -25,6 +26,7 @@ Intelligence: The data is passed to Google Gemini. Using a custom system prompt,
 Refinement: A JavaScript Code Node cleans the AI's output, stripping Markdown formatting and converting the text into a structured JSON object that other apps can understand.
 
 Task Creation: The workflow connects via API to Google Sheets, automatically appending a new row with the timestamped, categorized task.
+
 
 Proof of Concept:
 
@@ -38,7 +40,8 @@ Here is a look at the raw brain of the assistant. You can see how the AI takes a
 
 5. The Final Task Log (Google Sheets)
 The final destination. Every row here was generated without a single human keystroke. 
-![Google Sheets Results](sheets-results.png)
+![Google Sheets Results](google-sheets-result.png)
+
 
 Setup and Installation : 
 
