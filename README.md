@@ -62,7 +62,8 @@ JSON
   "message": "I am unable to access my account and I have an urgent deadline!"
 }
 
-Future Extensibility (The Next Steps)
+Future Extensibility (The Next Steps):
+
 Instant Notifications: Add a Slack/Discord node to ping the team immediately for "High" urgency tasks.
 
 Sentiment Analysis: Track customer frustration levels numerically to prioritize angry customers.
