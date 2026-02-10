@@ -1,0 +1,214 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "support-ticket",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -64,
+        -16
+      ],
+      "id": "0183ad46-911a-4d62-8a2e-bf9ebce4bc71",
+      "name": "Webhook",
+      "webhookId": "a97731fa-bc08-4c87-ad9b-93d9b69be5a7"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Analyze this customer support request and respond ONLY with a raw JSON object. Do not include any conversational text, notes, or explanations.\n\nDATA TO ANALYZE:\nCustomer Name: {{ $json.body.name }}\nCustomer Email: {{ $json.body.email }}\nMessage: {{ $json.body.message }}\n\nJSON FORMAT:\n{\n  \"summary\": \"A concise 10-word summary of the issue\",\n  \"name\": \"The customer's full name\",\n  \"urgency\": \"High, Medium, or Low\",\n  \"topic\": \"Technical, Billing, Shipping, or Other\"\n}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        128,
+        -16
+      ],
+      "id": "0ec39057-2c4d-4c85-be76-9b7eecdec9f1",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YC3J2CEcR7cEEWkf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1H1J3it9CYMPKUimdODEbu7E4wXb_27lmXy9YfDW-sDk/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1H1J3it9CYMPKUimdODEbu7E4wXb_27lmXy9YfDW-sDk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $now }}",
+            "Topic": "={{ $json.topic }}",
+            "Urgency": "={{ $json.urgency }}",
+            "Summary": "={{ $json.summary }}",
+            "Name": "={{ $json.name }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Topic",
+              "displayName": "Topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Urgency",
+              "displayName": "Urgency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        608,
+        -16
+      ],
+      "id": "f3885b23-1787-499f-a0fa-624c6f1d4b2a",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "c4rswnSyv0NyXrCG",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Navigate through the nested layers to find the text\nconst rawText = $input.first().json.content.parts[0].text;\n\nif (!rawText) {\n  return { error: \"Could not find the text inside content.parts[0]\" };\n}\n\ntry {\n  // 2. Remove Markdown code blocks\n  const cleanJson = rawText.replace(/```json/g, \"\").replace(/```/g, \"\").trim();\n  \n  // 3. Turn it into real data\n  return JSON.parse(cleanJson);\n} catch (e) {\n  return { \n    error: \"Failed to parse JSON\", \n    raw_text: rawText \n  };\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        -16
+      ],
+      "id": "328d09ce-2b73-4827-9a50-d33c1c6c8f05",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "9bb941d0-65b8-4a5a-a8f0-ba3500ce4851",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "81a7bf6700e6935b6cb0aa2b6fa672c8685c41f3b002aa21ac26f3ac5fc853fb"
+  },
+  "id": "hWXlrMi07fbp1vv3qh4gH",
+  "tags": []
+}
