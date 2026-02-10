@@ -1,9 +1,8 @@
 # intelligent-workflow-assistant
 
-AI Adventurer Quest: Intelligent Workflow Assistant
-Project Title: AI-Powered Support Triage  and Task Automation
+Project Title: AI-Powered Support Triage and Task Automation
 The Mission :
-This project was built to solve a common bottleneck for customer support teams: the manual processing of incoming requests. This "Digital Sidekick" automates the journey from raw email input to structured, actionable data, allowing humans to focus on solving problems rather than logging them.
+This project was built to solve a common bottleneck for customer support teams: the manual processing of incoming requests. This Digital Sidekick automates the journey from raw email input to structured, actionable data, allowing humans to focus on solving problems rather than logging them.
 
 The Adventurer's Toolkit
 Automation Engine: n8n (Workflow Orchestration)
